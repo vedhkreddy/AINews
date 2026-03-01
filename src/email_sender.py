@@ -10,12 +10,13 @@ def send_email(subject, html_body, to_email=None):
 
     Returns the Resend response dict on success, raises on failure.
     """
+    recipients = [e.strip() for e in (to_email or RECIPIENT_EMAIL).split(",") if e.strip()]
     params = {
         "from": f"AI News Digest <{SENDER_EMAIL}>",
-        "to": [to_email or RECIPIENT_EMAIL],
+        "to": recipients,
         "subject": subject,
         "html": html_body,
     }
     response = resend.Emails.send(params)
-    print(f"Email sent! ID: {response.get('id', 'unknown')}")
+    print(f"Email sent to {len(recipients)} recipient(s)! ID: {response.get('id', 'unknown')}")
     return response
