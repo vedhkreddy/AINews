@@ -1,0 +1,4 @@
+feedparser>=6.0
+groq>=0.4
+resend>=0.7
+python-dotenv>=1.0

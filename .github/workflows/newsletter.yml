@@ -1,0 +1,43 @@
+name: AI News Newsletter
+
+on:
+  schedule:
+    # Daily at 13:00 UTC = 5am PST / 6am PDT
+    - cron: "0 13 * * *"
+  workflow_dispatch: # Manual trigger button
+
+jobs:
+  send-newsletter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Send newsletter
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+        run: python main.py
+
+  # Prevent GitHub from auto-disabling the workflow after 60 days of inactivity
+  keepalive:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Keepalive ping
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit --allow-empty -m "chore: keepalive ping [skip ci]"
+          git push
