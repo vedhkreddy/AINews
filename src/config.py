@@ -4,9 +4,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 GROQ_API_KEY = os.environ["GROQ_API_KEY"]
-RESEND_API_KEY = os.environ["RESEND_API_KEY"]
+GMAIL_ADDRESS = os.environ["GMAIL_ADDRESS"]
+GMAIL_APP_PASSWORD = os.environ["GMAIL_APP_PASSWORD"]
 RECIPIENT_EMAIL = os.environ["RECIPIENT_EMAIL"]
-SENDER_EMAIL = os.environ.get("SENDER_EMAIL", "onboarding@resend.dev")
 
 GROQ_MODEL = "llama-3.3-70b-versatile"
 
